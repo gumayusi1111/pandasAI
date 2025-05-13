@@ -7,6 +7,10 @@ from pandasai.llm.local_llm import LocalLLM
 import logging
 import re
 
+# 在导入代码顶部设置Matplotlib使用非交互式后端
+import matplotlib
+matplotlib.use('Agg')  # 使用非交互式后端，避免GUI窗口
+
 # Configure logging
 logger = logging.getLogger(__name__)
 
@@ -141,7 +145,24 @@ def generate_pandas_code(csv_file_path, query, model_name="deepseek-chat"):
             model=model_name
         )
         
-        pandas_ai_agent = Agent([df], config={"llm": llm, "verbose": False, "save_logs": False})
+        # 确保导出目录存在，但我们将禁用保存图表功能
+        exports_path = os.path.join(os.getcwd(), 'exports', 'charts')
+        os.makedirs(exports_path, exist_ok=True)
+        
+        # PandasAI配置 - 禁用图表保存功能
+        config = {
+            "llm": llm, 
+            "verbose": False, 
+            "save_logs": False,
+            "enforce_privacy": False,
+            "enable_cache": True,
+            "use_error_correction_framework": False,
+            "save_charts": False,  # 设置为False，禁用图表保存
+            "save_charts_path": exports_path,
+            "custom_whitelisted_dependencies": ["matplotlib.pyplot", "numpy"]
+        }
+        
+        pandas_ai_agent = Agent([df], config=config)
         
         # Run the query
         logger.info(f"发送查询: '{query}'")

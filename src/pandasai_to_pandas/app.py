@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from collections import deque
 import pandas as pd
 import logging
@@ -136,10 +136,17 @@ def get_supported_formats():
     """Get the list of supported file formats"""
     return jsonify(list(SUPPORTED_FORMATS.keys()))
 
+# 图表功能已禁用，不再提供图表文件服务
+# @app.route('/exports/charts/<path:filename>')
+# def serve_chart(filename):
+#     """Serve generated chart images"""
+#     charts_dir = os.path.join(os.getcwd(), 'exports', 'charts')
+#     return send_from_directory(charts_dir, filename)
+
 if __name__ == '__main__':
     # Create temp uploads directory if it doesn't exist
     temp_path = os.path.join(os.path.dirname(__file__), 'temp_uploads')
     os.makedirs(temp_path, exist_ok=True)
     
     # Run the app
-    app.run(debug=True) 
+    app.run(debug=True, port=8080) # 使用8080端口而不是默认的5000 

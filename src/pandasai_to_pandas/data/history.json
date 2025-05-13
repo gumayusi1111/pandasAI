@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "timestamp": "2025-05-14T01:09:43.428101",
+    "query": "替我给我柱状图 生产代码根据价格",
+    "model": "deepseek-chat",
+    "code": "plt.figure(figsize=(10, 6))\nplt.bar(dfs[0]['产品名称'], dfs[0]['单价'], color='skyblue')\nplt.title('产品价格比较')\nplt.xlabel('产品名称')\nplt.ylabel('价格(元)')\nplt.xticks(rotation=45)\nplt.tight_layout()\nchart_filename = '/Users/wenbai/Desktop/pandas_ai_to_pandas-main/exports/charts/temp_chart.png'\nplt.savefig(chart_filename)\nplt.close()\n\n# 注意: 已移除PandasAI结果格式化代码。\n# 上面的代码是标准Pandas代码，可以直接在Python环境中运行。",
+    "file": "sample_data.csv",
+    "tokens": 161
+  }
+]
