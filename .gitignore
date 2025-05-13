@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*.class
+
+# Poetry virtualenv
+.venv/
+
+# Other Virtual environments
+venv/
+ENV/
+env/
+pip-freeze.txt
+pip-ments.txt
+
+# Environment variables
+.env
+*.env.*
+!/.env.example # common practice to commit an example env file
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.DS_Store
+*.swp
+*~
+*.bak
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+*.egg
+wheels/
+
+# Test artifacts
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+nosetests.xml
+
+# Logs
+*.log
+logs/
+
+# Databases
+*.sqlite3
+*.db
+*.db-journal
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# mypy
+.mypy_cache/
+
+# pre-commit
+.pre-commit-config.yaml
+# (If pre-commit generates local hooks, they might be in .git/hooks, which is fine)

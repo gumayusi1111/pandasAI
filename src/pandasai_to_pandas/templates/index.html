@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <title>PandasAI到Pandas转换器</title>
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Code highlighting library -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+    </script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <!-- 左侧历史记录侧边栏 -->
+    <div class="sidebar-history">
+        <div class="history-header">
+            <h2><i class="fas fa-history"></i> 历史记录</h2>
+            <button id="clear-history-btn"><i
+                    class="fas fa-trash-alt"></i>
+                清除历史</button>
+        </div>
+        <div class="history-list" id="history-list">
+            <!-- 历史记录将在这里显示 -->
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <header>
+                <h1><i class="fas fa-magic"></i> PandasAI 到 Pandas
+                    代码转换器
+                </h1>
+                <p>使用自然语言生成标准 Pandas 代码</p>
+                <div id="model-notification"
+                    class="model-notification">
+                </div>
+            </header>
+
+            <!-- 复制成功通知 -->
+            <div id="copy-notification" class="copy-notification">
+                <div class="copy-notification-content">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="copy-text">
+                        <div class="copy-title">代码已复制到剪贴板</div>
+                        <div class="copy-details">可以直接粘贴使用</div>
+                    </div>
+                </div>
+            </div>
+
+            <main>
+                <section class="input-section">
+                    <form id="generate-form">
+                        <div class="form-group">
+                            <label for="model"><i
+                                    class="fas fa-robot"></i>
+                                选择模型：</label>
+                            <select id="model" name="model" required>
+                                <option value="deepseek-chat">
+                                    deepseek-chat</option>
+                                <option value="deepseek-r1">
+                                    deepseek-r1
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group file-upload">
+                            <label for="csv-file"><i
+                                    class="fas fa-file-upload"></i>
+                                上传数据文件：</label>
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="csv-file"
+                                    name="csv_file"
+                                    accept=".csv,.xlsx,.xls,.json,.parquet,.feather,.pickle,.pkl">
+                                <div class="file-upload-label">
+                                    <span id="file-name"><i
+                                            class="fas fa-cloud-upload-alt"></i>
+                                        拖放或点击上传文件</span>
+                                </div>
+                            </div>
+                            <small><i class="fas fa-info-circle"></i>
+                                支持的格式: CSV, Excel, JSON, Parquet,
+                                Feather,
+                                Pickle 等。如不上传，将使用示例数据</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="query"><i
+                                    class="fas fa-comment-alt"></i>
+                                自然语言描述：</label>
+                            <textarea id="query" name="query" rows="4"
+                                required
+                                placeholder="例如：找出销量最高的产品类别并绘制柱状图"></textarea>
+                        </div>
+
+                        <div class="form-group button-group">
+                            <button type="submit" id="generate-btn"><i
+                                    class="fas fa-code"></i>
+                                生成代码</button>
+                            <button type="button" id="clear-btn"><i
+                                    class="fas fa-eraser"></i>
+                                清除</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="output-section">
+                    <div class="output-header">
+                        <h2><i class="fas fa-laptop-code"></i> 生成的
+                            Pandas
+                            代码</h2>
+                        <button id="copy-btn" disabled><i
+                                class="fas fa-copy"></i> 复制代码</button>
+                    </div>
+
+                    <!-- 进度条容器 -->
+                    <div id="progress-container"
+                        class="progress-container">
+                        <div class="progress-info">
+                            <div class="progress-status"><i
+                                    class="fas fa-spinner fa-spin"></i>
+                                正在生成代码...</div>
+                            <div class="progress-details">
+                                <span
+                                    id="progress-percentage">0%</span>
+                                <span id="progress-tokens">0
+                                    tokens</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progress-bar-fill"
+                                class="progress-bar-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="code-container">
+                        <pre><code class="language-python" id="code-output"># 代码将在这里显示</code></pre>
+                    </div>
+                    <div id="error-message" class="error"></div>
+                    <div class="code-info">
+                        <p><i class="fas fa-info-circle"></i>
+                            生成的代码已转换为标准
+                            Pandas 格式，可直接复制到 Python 环境中使用。</p>
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <p>PandasAI 到 Pandas 转换器 &copy; 2024 | <i
+                        class="fas fa-code"></i> 生成标准 Pandas 代码，即复即用
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}">
+    </script>
+</body>
+
+</html>
